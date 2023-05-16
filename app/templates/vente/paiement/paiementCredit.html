@@ -1,0 +1,118 @@
+{% load static %}
+{% load myFilters %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+    <link rel="stylesheet" href="../static/growl-notification/light-theme.min.css">
+    
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <title>Paiement credit</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <h4 class="display-5 d-inline">Liste des payements</h4>
+   
+    <input
+    class="hid search"
+      type="text"
+      id="myInput"
+      onkeyup="SearchBar()"
+      placeholder="Search for payements.."
+    />
+    
+    <table class="table tproducts">
+      <thead>
+        <th>Payement N°</th>
+        <th>Client</th>
+        <th>Etat</th>
+        <th>Ventes</th>
+        <th>Montant</th>
+        <th>Montant payé</th>
+       
+        
+        
+        <th class="hid">Actions</th>
+      </thead>
+      {% for p in p %}
+      <tbody>
+        <tr data-aos="fade-right" data-aos-anchor-placement="bottom-bottom">
+          
+          <td>{{p.code_pc}}</td>
+          <td>{{p.client}}</td>
+          <td>
+            {% if p.etat_pc > 0 %}
+            <span class="badge bg-success">Payé</span>
+            {% else %}
+            <span class="badge bg-danger">non Payé</span>
+
+            {% endif %}
+
+
+
+            </td>
+          <td>
+            <ul>
+              {% for v in v %}
+              {% if v.client.paiement_credit == p %}
+              <li>
+                <a id="unlink" href="{% url 'editV' v.code_vente %}"> {{v.code_vente}}</a> (<strong>{{v.total_vente}}</strong>)
+                </li>
+                
+              {% endif %}
+              {% endfor %}
+
+            </ul>
+          </td>
+          <td> <strong>{{ v|sumtotalttcpc:p }} </strong> </td>
+
+        
+      <td> <strong>{{ p.montant_payé }} </strong> </td>
+          
+ 
+          
+          <!-- le lien vers la page de modification en gardant le id de la cmd à modifier -->
+          <td class="hid">
+            {% if p.etat_pc == 0 %}
+            <a class="btn btn-success" href="{% url 'payerPC' p.code_pc %}">Payer</a>
+            {% endif %}
+            </td>
+          <!-- le lien vers la page de suppression en gardant le id de la cmd à supprimer -->
+        </tr>
+        {% endfor%}  
+       
+      </tbody> 
+
+    </table>
+    <div style="display: flex;flex-direction: column;align-items: flex-end;">
+    <button style="background-color: purple;float: right;margin-right: 25px; width: 18%;margin-bottom: 20px;" id="print-button" class="btn btn-primary" >Print</button>
+
+
+  </div>
+  </body>
+
+  <script src="{% static 'javascript/script.js' %}"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+
+</html>

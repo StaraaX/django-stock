@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+    
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+   
+    <title>Analyse des Achats</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+
+    <div>
+      <h2 class="text-center">Achats par produit</h2>
+    <canvas id="myChart" style="width: 100px; height: 100px;"></canvas>
+    </div>
+
+    <div>
+        <h2 class="text-center">Achats par fournisseur</h2>
+        <canvas id="myChart2" style="width: 100px; height: 100px;"></canvas>
+    </div>
+    
+    
+
+
+
+
+
+
+
+
+  </body>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'javascript/chart.js' %}"></script>
+
+
+  <script>
+    AOS.init();
+    
+const labels = [
+    {% for p in produits %}
+    '{{ p.produit__nom_produit }}',
+
+    {% endfor %}
+];
+const values = [
+    {% for p in produits %}
+    {{p.qte_prod}},
+    {% endfor %}
+];
+
+const products = [];
+
+for (let i = 0; i < labels.length; i++) {
+    let product = {
+        label: labels[i],
+        value: values[i],
+        color: "#"+Math.floor(Math.random() * 16777215).toString(16)
+    };
+    products.push(product);
+}
+
+products.sort((a, b) => b.value - a.value);
+
+  var config = {
+    type: 'bar',
+    
+    data: {
+      labels: products.map((product) => product.label),
+      datasets: [{
+  
+        label: 'Achats',
+        data: products.map((product) => product.value),
+        backgroundColor: [...
+        products.map((product) => product.color)
+        ],
+        borderColor: [...
+        products.map((product) => product.color)
+        ],
+        hoverBorderWidth: 3,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      
+      legend: {
+         display: false
+      }, 
+      scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+ }
+   
+  }
+
+
+
+
+  const labels2 = [
+    {% for f in fournisseurs %}
+    '{{ f.bl_facture__fournisseur__nom_fr }} {{ f.bl_facture__fournisseur__prenom_fr }}',
+
+    {% endfor %}
+];
+const values2 = [
+    {% for f in fournisseurs %}
+    {{f.qte_prod}},
+    {% endfor %}
+];
+
+const fournisseurs = [];
+
+for (let i = 0; i < labels2.length; i++) {
+    let fournisseur = {
+        label: labels2[i],
+        value: values2[i],
+        color: "#"+Math.floor(Math.random() * 16777215).toString(16)
+    };
+    fournisseurs.push(fournisseur);
+}
+fournisseurs.sort((a, b) => b.value - a.value);
+
+console.log(fournisseurs);
+
+var config2 = {
+  type: 'bar',
+  
+  data: {
+    labels: fournisseurs.map((fournisseur) => fournisseur.label),
+    datasets: [{
+
+      label: 'Achats',
+      data: fournisseurs.map((fournisseur) => fournisseur.value),
+      backgroundColor: [...
+      fournisseurs.map((fournisseur) => fournisseur.color)
+      ],
+      borderColor: [...
+      fournisseurs.map((fournisseur) => fournisseur.color)
+      ],
+      hoverBorderWidth: 3,
+      borderWidth: 1
+    }]
+  },
+  options: {
+    
+    legend: {
+       display: false
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+}
+ 
+}
+    
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, config);
+
+    var ctx2 = document.getElementById('myChart2').getContext('2d');
+    var chart2 = new Chart(ctx2, config2);
+</script>
+
+  <script src="{% static 'javascript/script.js' %}"></script>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+
+</html>

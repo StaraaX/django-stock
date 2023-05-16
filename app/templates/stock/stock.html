@@ -1,0 +1,154 @@
+{% load static %}
+{% load myFilters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+    
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <title>Stocks</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <h4 class="display-5 d-inline">Liste des Produits en Stock</h4>
+    <input
+    class="hid search"
+      type="text"
+      id="myInput"
+      onkeyup="SearchBar()"
+      placeholder="Rechercher un Produit ..."
+    />
+    
+    <table class="table tproducts">
+      <thead>
+        <th>Code Produit</th>
+        <th>Nom Produit</th>
+        <th>Stock</th>
+
+      </thead>
+      {% for sp in sp %}
+      <tbody>
+        <tr data-aos="fade-right" data-anchor-placement="center-center">
+            <td> 
+              {{sp.produit.code_produit}}
+            </td>
+
+            <td> 
+                {{sp.produit}}
+            </td>
+
+            <td>
+                {{sp.qteDispo}}
+            </td>
+          </tr>
+        {% endfor%}  
+       
+      </tbody> 
+
+    </table>
+    <div style="display: flex;flex-direction: column;align-items: flex-end;">
+    
+    <button style="background-color: purple;float: right;margin-right: 25px; width: 18%;margin-bottom: 20px;" id="print-button" class="btn btn-primary" >Imprimer</button>
+
+
+  </div>
+  <h3 class="display-5 d-inline">Bénéfice Totale <strong>{{s.benefice}}</strong> DA </h3> 
+  <canvas id="myChartS"></canvas>
+
+  </body>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  
+
+  <script src="{% static 'javascript/chart.js' %}"></script>
+  <script src="{% static 'javascript/script.js' %}"></script>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+  <script>
+    AOS.init();
+    
+const labels = [
+    {% for sp in sp %}
+'{{sp.produit}}',
+
+    {% endfor %}
+];
+const values = [
+    {% for sp in sp %}
+'{{sp.qteDispo}}',
+    {% endfor %}
+];
+
+const products = [];
+
+for (let i = 0; i < labels.length; i++) {
+    let product = {
+        label: labels[i],
+        value: values[i],
+        color: "#"+Math.floor(Math.random() * 16777215).toString(16)
+    };
+    products.push(product);
+}
+
+products.sort((a, b) => b.value - a.value);
+
+
+
+
+
+
+
+
+
+
+  var config = {
+    type: 'pie',
+    
+    data: {
+      labels: products.map((product) => product.label),
+      datasets: [{
+  
+        label: 'Ventes',
+        data: products.map((product) => product.value),
+        backgroundColor: [...
+        products.map((product) => product.color)
+        ],
+        borderColor: [...
+        products.map((product) => product.color)
+        ],
+        hoverBorderWidth: 3,
+        borderWidth: 1
+      }]
+    }
+      
+      
+ }
+   
+ 
+    
+    var ctx = document.getElementById('myChartS').getContext('2d');
+    var chart = new Chart(ctx, config);
+</script>
+
+
+</html>

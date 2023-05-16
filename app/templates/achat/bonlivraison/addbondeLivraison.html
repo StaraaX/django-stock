@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script>
+        function toggleDisabled(checkbox) {
+            checkbox.closest('tr').querySelectorAll('input, select').forEach(function(el) {
+                el.disabled = !checkbox.checked;
+            });
+        }
+    </script>
+
+    <title>Bon de livraison</title>
+  <body>
+    {% include 'header.html' %}
+    <h4> Insérer un Bon de Livraison </h4>
+
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input
+    class="hid"
+      type="text"
+      id="myInput"
+      onkeyup="SearchBar()"
+      placeholder="Rechercher un Produit ..."
+    />
+        
+        <table class="table tproducts">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Sélectionner</th>
+              <th>Prix HT</th>
+              <th>Prix Vente</th>
+              <th>Quantité</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for produit in produits %}
+              <tr>
+                <td>{{ produit.nom_produit }}</td>
+                <td><input type="checkbox" name="produits" onchange="checkboxChanged(this)" value="{{ produit.code_produit }}"></td>
+                <td><input type="number" name="priceht_{{ produit.code_produit }}" value="0" disabled></td>
+                <td><input type="number" name="pricevt_{{ produit.code_produit }}" value="0" disabled></td>
+                <td><input type="number" name="quantity_{{ produit.code_produit }}" value="0" disabled></td>
+
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <input type="submit" value="Save">
+      </form>
+
+    
+
+</body>
+
+<script src="{% static 'javascript/script.js' %}"></script>
+<script>
+  var select=document.getElementById("id_fournisseur")
+  var span=document.createElement("span")
+  span
+  span.innerHTML += ' <a id="ADDFr" href="#" onclick="window.open(\'{% url "addS" %}\', \'newwindow\', \'width=700, height=500\'); return false;">Ajouter un Fournisseur</a>'
+  select.parentNode.insertAdjacentElement("afterend",span)
+</script>
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+  crossorigin="anonymous"
+></script>
+
+
+</html>

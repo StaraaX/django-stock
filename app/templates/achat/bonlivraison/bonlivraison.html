@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+    <link rel="stylesheet" href="../static/growl-notification/light-theme.min.css">
+    
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <title>Bon de Livraison</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <h4 class="display-5 d-inline">Liste des Bons de Livraison</h4>
+   
+    <input
+    class="hid search"
+      type="text"
+      id="myInput"
+      onkeyup="SearchBar()"
+      placeholder="Rechercher un Bon de Livraison ..."
+    />
+    <table class="table tproducts">
+      <thead>
+        <th>Bon N°</th>
+        <th>Total HT</th>
+        <th>Total TTC</th>
+        <th>Remise </th>
+        <th>Date</th>
+        <th>Fournisseur</th>
+        <th>Prod (Prix vente fournisseur | Quantité)</th>
+        
+        
+        <th class="hid">Actions</th>
+      </thead>
+      {% for b in bl %}
+      <tbody>
+        <tr data-aos="fade-right" data-aos-anchor-placement="bottom-bottom">
+          <td>{{b.code_doc }}</td>
+          <td>{{b.totalht }} DA</td>
+          <td>{{b.totalttc_bl }} DA</td>
+          <td>{{b.remise }} %</td>
+          <td>{{b.date_doc}}</td>
+          <td>{{b.fournisseur}}</td>
+          <td>
+            
+            {% for p in blp %}
+            {% if p.bl_facture.code_doc == b.code_doc %}
+              <p>
+                <strong> {{p.produit}} </strong> ( <strong> {{p.prix_vente_fr}} </strong> DA | x<strong>{{p.qteprodbl}} </strong>)
+              </p>
+            {% endif %}
+            {% endfor %}
+            
+
+          
+          
+          <!-- le lien vers la page de modification en gardant le id de la cmd à modifier -->
+          <td class="hid">
+            <a class="btn btn-secondary" href="{% url 'editBL' b.code_doc %}">Modifier</a>
+
+            <a class="btn btn-danger" href="{% url 'deleteBL' b.code_doc %}">
+              Supprimer
+            </td>
+          <!-- le lien vers la page de suppression en gardant le id de la cmd à supprimer -->
+        </tr>
+        {% endfor%}  
+       
+      </tbody> 
+
+    </table>
+    <div style="display: flex;flex-direction: column;align-items: flex-end
+
+    ;">
+    <a style="float: right;margin-right: 25px; width: 18%; margin-bottom: 20px;" class="btn btn-primary " href="{% url 'addBL' %}">Ajouter un Bon de Livraison</a>
+    <button style="background-color: purple;float: right;margin-right: 25px; width: 18%;margin-bottom: 20px;" id="print-button" class="btn btn-primary" >Imprimer</button>
+
+    <a style="float: right;margin-right: 25px; width: 18%; margin-bottom: 20px;" class="btn btn-danger " href="{% url 'deleteAllBL' %}">Supprimer tout les Bons</a>
+
+  </div>
+  </body>
+
+  <script src="{% static 'javascript/script.js' %}"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+
+</html>

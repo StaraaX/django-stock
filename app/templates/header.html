@@ -1,0 +1,60 @@
+{% load static %}
+
+  <nav>
+    <ul class="favorite-tabs">
+     
+   <span class="dropdown">
+        <li id="nav" data-bs-toggle="dropdown" aria-expanded="false">Analyse</li>
+        <ul class="dropdown-menu">
+          <li onclick="window.location.href='/analyse/achat/'">Analyse Achat</li>
+          <li onclick="window.location.href='/analyse/vente/'">Analyse Vente</li>
+        </ul>
+      </span>
+
+   
+
+
+      <span class="dropdown">
+        <li id="nav" data-bs-toggle="dropdown" aria-expanded="false">Vente</li>
+        <ul class="dropdown-menu">
+          <li onclick="window.location.href='/vente'">Consulter les Ventes</li>
+          <li onclick="window.location.href='/paiementcredit'">Paiements Crédit</li>
+        </ul>
+      </span>
+        
+        
+
+
+      <span class="dropdown">
+        <li id="nav" data-bs-toggle="dropdown" aria-expanded="false">Achat</li>
+        <ul class="dropdown-menu">
+          <li onclick="window.location.href='/bondecommande'">Bon de Commande</li>
+          <li onclick="window.location.href='/bondelivraison'">Bon de Livraison</li>
+          <li onclick="window.location.href='/facture'">Facture</li>
+          <li onclick="window.location.href='/reglement'">Réglement</li>
+        </ul>
+      </span>
+      
+      <span class="dropdown">
+        <li id="nav" data-bs-toggle="dropdown" aria-expanded="false">Gestion</li>
+        <ul class="dropdown-menu">
+          <li onclick="window.location.href='/products'">Produits</li>
+          <li onclick="window.location.href='/typeproducts'">Catégories</li>
+          <li onclick="window.location.href='/clients'">Clients</li>
+          <li onclick="window.location.href='/suppliers'">Fournisseurs</li>
+        </ul>
+      </span>
+
+      <li id="nav" onclick="window.location.href='/stock'">Stock</li>
+
+
+      <span class="dropdown">
+        <li id="nav" data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}</li>
+        <ul class="dropdown-menu">
+          <li onclick="window.location.href='/myaccount'">Mon Compte</li>
+          <li onclick="window.location.href='/logout'">Se Déconnecter</li>
+        </ul>
+      </span>
+    </ul>
+  </nav>
+</body>

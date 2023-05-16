@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <title>Modifier une Vente</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <h3>Modifier une Vente</h3>
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p}}
+
+      
+      
+        <table class="table tproducts">
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Selectionner</th>
+              <th>Prix Vente</th>
+              <th>Quantité</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for produit in vente_produits %}
+              <tr>
+                <td>{{ produit.produit }}</td>
+                <td><input type="checkbox" name="produits" onchange="checkboxChanged(this)" value="{{ produit.produit.code_produit }}"  ></td>
+                <td><input type="number" name="pricevt_{{ produit.produit }}" value={{produit.prixU_vente}} disabled min="1"></td>
+                <td><input type="number" name="quantity_{{ produit.produit}}" value={{produit.qte_prod}}  disabled min="1" max={{produit.qteDispo}}></td>
+
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href=" {% url 'facture' %}">Annuler</a>
+
+        <input type="submit" value="Modifier">
+    </form>
+  </body>
+
+  <script src="{% static 'javascript/script.js' %}"></script>
+  <script>
+    var select=document.getElementById("id_client")
+    var span=document.createElement("span")
+    span.innerHTML += ' <a href="#" onclick="window.open(\'{% url "addC" %}\', \'newwindow\', \'width=700, height=500\'); return false;">(ajouter un Client)</a>'
+    span.style.color="blue"
+    select.parentNode.insertAdjacentElement("afterend",span)
+  
+  </script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+
+</html>

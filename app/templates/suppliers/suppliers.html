@@ -1,0 +1,95 @@
+{% load static %}
+{% load myFilters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+    />
+    <link rel="stylesheet" href="../static/growl-notification/light-theme.min.css">
+    
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <title>Fournisseurs</title>
+  </head>
+  <body>
+    {% include 'header.html' %}
+    <h4 class="display-5 d-inline">Liste des Fournisseurs</h4>
+   
+    <input
+    class="hid"
+      type="text"
+      id="myInput"
+      onkeyup="SearchBar()"
+      placeholder="Rechercher un Fournisseur ..."
+    />
+    <table class="table tproducts">
+      <thead>
+        <th>Code Fournisseur</th>
+        <th>Nom Fournisseur</th>
+        <th>Addresse</th>
+        <th>Téléphone</th>
+        <th>Solde</th>
+        <th class="hid">Actions</th>
+        <th class="hid"></th>
+      </thead>
+      <tbody>
+        {% for supplier in suppliers %}
+        
+        <tr data-aos="fade-right" data-aos-anchor-placement="bottom-bottom">
+          <td>{{supplier.code_fr }}</td>
+          <td>{{supplier.nom_fr}} {{supplier.prenom_fr}}</td>
+          <td>{{supplier.adr_fr }}</td>
+          <td>{{supplier.tel_fr }}</td>
+
+
+          <td><strong>{{ bf|soldeSupplier:supplier }}</strong> DA</td>
+
+
+          <td class="hid">
+            <a class="btn btn-secondary" href="{% url 'editS' supplier.code_fr %}">
+              Modifier
+            </a> 
+            <a class="btn btn-danger" href="{% url 'deleteS' supplier.code_fr %}">
+              Supprimer
+            </a>
+          </td>
+          <!-- le lien vers la page de modification en gardant le id de la cmd à modifier -->
+          </tr>
+        {% endfor%}
+     
+      
+       
+      </tbody> 
+
+    </table>
+    <div style="display: flex;flex-direction: column;align-items: flex-end
+
+    ;">
+    <a style="float: right;margin-right: 25px; width: 18%; margin-bottom: 20px;" class="btn btn-primary " href="{% url 'addS' %}">Ajouter un Fournisseur</a>
+    <button style="background-color: purple;float: right;margin-right: 25px; width: 18%;margin-bottom: 20px;" id="print-button" class="btn btn-primary" >Imprimer</button>
+
+  </div>
+  </body>
+
+  <script src="{% static 'javascript/script.js' %}"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"
+  ></script>
+
+
+</html>
